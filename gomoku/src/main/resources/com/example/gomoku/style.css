@@ -1,0 +1,65 @@
+/* Dark Wood Button - Professional Style */
+.dark-wood-button {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3)),
+        linear-gradient(to bottom, #4a3428, #2d1b12);
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-padding: 12px 28px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #1a1008;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.2, 0, 2);
+    -fx-background-insets: 0, 1.5;
+}
+
+.dark-wood-button:hover {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.2)),
+        linear-gradient(to bottom, #5d4333, #3a2419);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0.3, 0, 3);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.dark-wood-button:pressed {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.1)),
+        linear-gradient(to bottom, #2d1b12, #1a1008);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.1, 0, 1);
+    -fx-translate-y: 1px;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.dark-wood-button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+/* Light Wood Button - Professional Style */
+.light-wood{
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(0,0,0,0.05)),
+        linear-gradient(to bottom, #d4c5ba, #b8a898);
+    -fx-text-fill: #000000;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-padding: 12px 28px;
+    -fx-background-radius: 6px;
+    -fx-border-color: #9a8878;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.2, 0, 2);
+    -fx-background-insets: 0, 1.5;
+}
+
+
+
+
