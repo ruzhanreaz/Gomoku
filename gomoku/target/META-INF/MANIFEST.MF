@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: Maven JAR Plugin 3.3.0
+Build-Jdk-Spec: 21
+Class-Path: javafx-controls-21.0.6.jar javafx-controls-21.0.6-win.jar ja
+ vafx-graphics-21.0.6.jar javafx-graphics-21.0.6-win.jar javafx-base-21.
+ 0.6.jar javafx-base-21.0.6-win.jar javafx-fxml-21.0.6.jar javafx-fxml-2
+ 1.0.6-win.jar
+Main-Class: com.example.gomoku.Launcher
+
