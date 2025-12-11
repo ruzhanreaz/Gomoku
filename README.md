@@ -10,7 +10,6 @@ java -version
 ```
 
 ### 2. Download the JAR
-If a compiled JAR is provided in this repository, it will be named `gomoku-fat.jar`.
 
 - **Download**: get `gomoku-fat.jar` from the repository.
 
