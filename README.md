@@ -1,10 +1,11 @@
 # Gomoku
 
-How to Run
-1. Make sure Java is installed
+##How to Run
+###1. Make sure Java is installed
 Check if Java is available on your system:
+```sh
 java -version
-2. Download the JAR
+###2. Download the JAR
 Download the compiled JAR directly from this repository:
 👉 gomoku-fat.jar
 3. Run the Game / AI
