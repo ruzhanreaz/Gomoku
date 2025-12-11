@@ -1,6 +1,6 @@
 # Gomoku
 
-## How to Run
+## How to Run(Windows)
 
 ### 1. Make sure Java is installed
 Check Java on your system:
