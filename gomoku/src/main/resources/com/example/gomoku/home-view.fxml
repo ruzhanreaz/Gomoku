@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="675.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gomoku.controller.HomeController">
+<StackPane prefHeight="675.0" prefWidth="620.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gomoku.controller.HomeController" styleClass="app-root">
     <children>
         <ImageView fx:id="backgroundView" fitHeight="675.0" fitWidth="620.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@image/background.png" />
-            </image></ImageView>
-      <Button fx:id="playButton" layoutX="274.0" layoutY="366.0" mnemonicParsing="false" onAction="#handlePlayButton" styleClass="dark-wood-button" stylesheets="@style.css" text="Play" />
+            </image>
+        </ImageView>
+
+        <VBox alignment="CENTER" spacing="12.0">
+            <children>
+                <Label text="GOMOKU" styleClass="title-text" />
+                <Label text="Five-in-a-row. Outsmart the AI or a friend." styleClass="subtitle-text" />
+                <Region prefHeight="8.0" />
+                <Button fx:id="playButton" mnemonicParsing="false" onAction="#handlePlayButton" styleClass="dark-wood-button" text="Play" />
+            </children>
+        </VBox>
     </children>
-</AnchorPane>
+</StackPane>
