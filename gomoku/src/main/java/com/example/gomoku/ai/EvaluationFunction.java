@@ -25,7 +25,7 @@ public class EvaluationFunction {
         return maxScore - minScore;
     }
 
-    private int evaluatePlayer(Board board, char player) {
+    public int evaluatePlayer(Board board, char player) {
         int score = 0;
         int size = board.getSize();
         Set<String> countedPatterns = new HashSet<>();
