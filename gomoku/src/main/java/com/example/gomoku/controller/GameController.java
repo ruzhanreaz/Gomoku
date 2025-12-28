@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -34,17 +35,38 @@ public class GameController implements Initializable {
     @FXML
     private Button backButton;
 
+    @FXML
+    private Label blackScoreLabel;
+
+    @FXML
+    private Label whiteScoreLabel;
+
+    @FXML
+    private Label lastMoveScoreLabel;
+
+    @FXML
+    private HBox gameOverButtons;
+
+    @FXML
+    private Button tryAgainButton;
+
+    @FXML
+    private Button closeGameButton;
+
     private Board board;
     private AIPlayer aiPlayer;
+    private EvaluationFunction evaluationFunction;
     private final String gameMode = "PVAI";
     private boolean blackTurn = true;
     private boolean gameOver = false;
     private final AtomicBoolean abortFlag = new AtomicBoolean(false);
+    private int previousBlackScore = 0;
+    private int previousWhiteScore = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         board = new Board(10);
-        EvaluationFunction evaluationFunction = new EvaluationFunction();
+        evaluationFunction = new EvaluationFunction();
         MoveGenerator moveGenerator = new MoveGenerator(2);
         MinimaxSearch minimaxSearch = new MinimaxSearch(evaluationFunction, moveGenerator);
         aiPlayer = new AIPlayer(Board.WHITE, Board.BLACK, 5, 3000, minimaxSearch);
@@ -64,6 +86,7 @@ public class GameController implements Initializable {
         }
 
         updateTurnLabel();
+        updateScoreboard();
     }
 
     private void handleCellClick(int row, int col, StackPane cell) {
@@ -73,6 +96,9 @@ public class GameController implements Initializable {
         if (!board.placeSymbol(row, col, currentPlayer)) return;
 
         placeStoneWithAnimation(cell, blackTurn);
+
+        // Update scoreboard after placing a stone
+        updateScoreboard();
 
         if (WinChecker.checkWin(board, row, col, currentPlayer)) {
             gameOver = true;
@@ -96,39 +122,11 @@ public class GameController implements Initializable {
 
     private void placeStoneWithAnimation(StackPane cell, boolean isBlack) {
         Circle stone = new Circle(20);
-
-        // Create professional gradient and shadow effects
-        if (isBlack) {
-            // Black stone with subtle highlight for 3D effect
-            javafx.scene.paint.RadialGradient gradient = new javafx.scene.paint.RadialGradient(
-                0, 0, 0.3, 0.3, 0.5, true,
-                javafx.scene.paint.CycleMethod.NO_CYCLE,
-                new javafx.scene.paint.Stop(0, Color.rgb(80, 80, 80)),
-                new javafx.scene.paint.Stop(0.5, Color.rgb(40, 40, 40)),
-                new javafx.scene.paint.Stop(1, Color.rgb(0, 0, 0))
-            );
-            stone.setFill(gradient);
-        } else {
-            // White stone with subtle shading for realistic appearance
-            javafx.scene.paint.RadialGradient gradient = new javafx.scene.paint.RadialGradient(
-                0, 0, 0.3, 0.3, 0.5, true,
-                javafx.scene.paint.CycleMethod.NO_CYCLE,
-                new javafx.scene.paint.Stop(0, Color.rgb(255, 255, 255)),
-                new javafx.scene.paint.Stop(0.7, Color.rgb(240, 240, 240)),
-                new javafx.scene.paint.Stop(1, Color.rgb(220, 220, 220))
-            );
-            stone.setFill(gradient);
-            stone.setStroke(Color.rgb(100, 100, 100));
-            stone.setStrokeWidth(1.5);
+        stone.setFill(isBlack ? Color.BLACK : Color.WHITE);
+        if (!isBlack) {
+            stone.setStroke(Color.BLACK);
+            stone.setStrokeWidth(1);
         }
-
-        // Add drop shadow for depth and 3D appearance
-        javafx.scene.effect.DropShadow dropShadow = new javafx.scene.effect.DropShadow();
-        dropShadow.setRadius(5.0);
-        dropShadow.setOffsetX(2.0);
-        dropShadow.setOffsetY(2.0);
-        dropShadow.setColor(Color.rgb(0, 0, 0, 0.5));
-        stone.setEffect(dropShadow);
 
         stone.setScaleX(0);
         stone.setScaleY(0);
@@ -187,6 +185,9 @@ public class GameController implements Initializable {
             placeStoneWithAnimation(cell, false);
         }
 
+        // Update scoreboard after AI move
+        updateScoreboard();
+
         if (WinChecker.checkWin(board, row, col, Board.WHITE)) {
             gameOver = true;
             Platform.runLater(() -> showWinDialog("AI (White)"));
@@ -222,25 +223,41 @@ public class GameController implements Initializable {
     }
 
     private void showWinDialog(String winner) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(winner + " Wins!");
-        alert.setContentText("Congratulations! " + winner + " has won the game with 5 in a row!");
-        alert.showAndWait().ifPresent(response -> resetGame());
+        updateTurnLabel();
+        gameOverButtons.setVisible(true);
+        gameOverButtons.setManaged(true);
+        boardGrid.setDisable(true);
+        
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game Over");
+            alert.setHeaderText(winner + " Wins!");
+            alert.setContentText("Congratulations! " + winner + " has won the game with 5 in a row!");
+            alert.show();
+        });
     }
 
     private void showDrawDialog() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText("It's a Draw!");
-        alert.setContentText("The board is full. No one wins!");
-        alert.showAndWait().ifPresent(response -> resetGame());
+        updateTurnLabel();
+        gameOverButtons.setVisible(true);
+        gameOverButtons.setManaged(true);
+        boardGrid.setDisable(true);
+        
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game Over");
+            alert.setHeaderText("It's a Draw!");
+            alert.setContentText("The board is full. No one wins!");
+            alert.show();
+        });
     }
 
     private void resetGame() {
         board.clear();
         gameOver = false;
         blackTurn = true;
+        previousBlackScore = 0;
+        previousWhiteScore = 0;
 
         for (javafx.scene.Node node : boardGrid.getChildren()) {
             if (node instanceof StackPane) {
@@ -248,7 +265,54 @@ public class GameController implements Initializable {
             }
         }
 
+        gameOverButtons.setVisible(false);
+        gameOverButtons.setManaged(false);
         boardGrid.setDisable(false);
         updateTurnLabel();
+        updateScoreboard();
+    }
+
+    @FXML
+    private void handleTryAgain() {
+        resetGame();
+    }
+
+    @FXML
+    private void handleCloseGame() {
+        Platform.exit();
+        System.exit(0);
+    }
+
+    private void updateScoreboard() {
+        // Calculate scores using the evaluation function
+        int blackScore = evaluationFunction.evaluatePlayer(board, Board.BLACK);
+        int whiteScore = evaluationFunction.evaluatePlayer(board, Board.WHITE);
+
+        // Calculate score changes
+        int blackChange = blackScore - previousBlackScore;
+        int whiteChange = whiteScore - previousWhiteScore;
+
+        // Update the score labels
+        blackScoreLabel.setText(String.format("%,d", blackScore));
+        whiteScoreLabel.setText(String.format("%,d", whiteScore));
+
+        // Update last move score change
+        if (blackChange != 0 || whiteChange != 0) {
+            String lastMoveText;
+            if (!blackTurn && whiteChange != 0) {
+                // AI just moved (White)
+                lastMoveText = String.format("White: %+,d", whiteChange);
+            } else if (blackTurn && blackChange != 0) {
+                // Player just moved (Black)
+                lastMoveText = String.format("Black: %+,d", blackChange);
+            } else {
+                lastMoveText = "N/A";
+            }
+            lastMoveScoreLabel.setText(lastMoveText);
+        }
+
+        // Store current scores for next comparison
+        previousBlackScore = blackScore;
+        previousWhiteScore = whiteScore;
     }
 }
